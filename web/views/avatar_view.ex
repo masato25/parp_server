@@ -19,7 +19,8 @@ defmodule ParpServer.AvatarView do
       bluetooth_status: avatar.bluetooth_status,
       bluetooth_type: avatar.bluetooth_type,
       inserted_at: converTime(avatar.inserted_at),
-      latest_report: converTime(avatar.latest_report)
+      latest_report: converTime(avatar.latest_report),
+      coordinate: avatar.coordinate
     }
   end
 

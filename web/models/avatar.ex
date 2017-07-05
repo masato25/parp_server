@@ -14,6 +14,7 @@ defmodule ParpServer.Avatar do
     field :custom_name, :string
     field :latest_report, :naive_datetime
     field :user_id, :integer
+    field :coordinate, :string
 
     has_many :av_history, AtHistory
 
@@ -25,7 +26,7 @@ defmodule ParpServer.Avatar do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :custom_name, :address, :bluetooth_status, :bluetooth_type, :latest_report])
+    |> cast(params, [:name, :custom_name, :address, :bluetooth_status, :bluetooth_type, :latest_report, :coordinate])
     |> validate_required([:address, :bluetooth_status, :name])
     |> unique_constraint(:address)
   end
