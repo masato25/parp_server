@@ -12,7 +12,7 @@ const columns = [{
   title: '狀態',
   dataIndex: 'status',
   key: 'status',
-}, 
+},
 {
   title: '開始',
   dataIndex: 'start_at',
@@ -28,6 +28,8 @@ class Avatar1 extends React.Component {
     super(props)
     this.state = {
       tdata: [],
+      name: '',
+      coordinate: '',
     }
     this.onEndChange = this.onEndChange.bind(this)
     this.fetchData = this.fetchData.bind(this)
@@ -50,6 +52,16 @@ class Avatar1 extends React.Component {
           }
         })
       })
+    ifetch(`/api/avatars/${avatarId}`, 'GET')
+      .then(function(stories) {
+        window.init_map(stories.data.name, stories.data.coordinate)
+        self.setState((p, n) => {
+          return {
+            name: stories.data.name,
+            coordinate: stories.data.coordinate,
+          }
+        })
+      })
   }
   onEndChange(){}
   render () {
@@ -61,6 +73,21 @@ class Avatar1 extends React.Component {
             <Row>
               <Card title="停車紀錄">
                 <Table dataSource={this.state.tdata} columns={columns} />
+              </Card>
+              <Card title="Map">
+                <div style={{overflow: 'hidden', height: '440px', width: '700px'}}>
+                  <div id='gmap_canvas' style={{height: '440px', width: '700px'}}></div>
+                    <div>
+                      <small>
+                        <a href="http://embedgooglemaps.com">Click here to generate yourmap!</a>
+                      </small>
+                    </div>
+                    <div>
+                      <small>
+                        <a href="https://premiumlinkgenerator.com/4shared-com">Check out the most trusted file hosts at premiumlinkgenerator.com!</a>
+                      </small>
+                    </div>
+                </div>
               </Card>
             </Row>
           </div>

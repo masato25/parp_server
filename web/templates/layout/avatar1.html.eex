@@ -13,6 +13,30 @@
 
   <body>
     <%= render @view_module, @view_template, assigns %>
+    <script src='https://maps.googleapis.com/maps/api/js?v=3.exp&key=key'></script>
+    <script type='text/javascript'>
+      function init_map(name, coordinate){
+        name = name || "my parking"
+        coordinate = coordinate || "0,0"
+        ct = coordinate.split(",")
+        var myOptions = {
+          zoom: 19,
+          center: new google.maps.LatLng(ct[0],ct[1]),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);
+        marker = new google.maps.Marker({
+          map: map,position: new google.maps.LatLng(ct[0],ct[1])
+        });
+        infowindow = new google.maps.InfoWindow({content:'<strong>' + name + '</strong><br>'});
+        google.maps.event.addListener(marker, 'click', function(){
+          infowindow.open(map,marker);
+        });
+        infowindow.open(map,marker);
+      }
+      window.init_map = init_map;
+    </script>
+    <style>img{max-width:none!important;background:none!important}</style>
     <script src="<%= static_path(@conn, "/js/avatar_1.js") %>"></script>
   </body>
 </html>
