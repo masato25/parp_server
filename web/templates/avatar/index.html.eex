@@ -1,0 +1,30 @@
+<html>
+  <body>
+    <h1>PARP</h1>
+    <hr>
+    <div class="col-md-12">
+      <table class="table-bordered">
+        <thead>
+          <th>id</th>
+          <th>name</th>
+          <th>address</th>
+          <th>bluetooth status</th>
+          <th>bluetooth type</th>
+          <th>status</th>
+        </thead>
+        <tbody>
+          <tr>
+            <%= for k <- @avatar do %>
+              <td><%= k.id %></td>
+              <td><%= k.name %></td>
+              <td><%= k.addr %></td>
+              <td><%= k.bluetooth_status %></td>
+              <td><%= k.btype %></td>
+              <td><%= k.count_status %></td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
