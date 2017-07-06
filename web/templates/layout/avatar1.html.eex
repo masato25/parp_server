@@ -7,13 +7,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello ParpServer!</title>
+    <title>Hello PAPR!</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/avatar_1.css") %>">
   </head>
 
   <body>
-    <%= render @view_module, @view_template, assigns %>
-    <script src='https://maps.googleapis.com/maps/api/js?v=3.exp&key=key'></script>
+    <main role="main">
+      <%= render @view_module, @view_template, assigns %>
+    </main>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=<%= Application.get_env(:parp_server, :google_api_key) %>"></script>
     <script type='text/javascript'>
       function init_map(name, coordinate){
         name = name || "my parking"
@@ -37,6 +40,7 @@
       window.init_map = init_map;
     </script>
     <style>img{max-width:none!important;background:none!important}</style>
+
     <script src="<%= static_path(@conn, "/js/avatar_1.js") %>"></script>
   </body>
 </html>

@@ -7,16 +7,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello ParpServer!</title>
+    <title>Hello PAPR!</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/login_1.css") %>">
   </head>
 
   <body>
-    <div class="container">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
-      </div>
-      <div class="col-md-1"></div>
-      <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <main role="main">
+      <%= render @view_module, @view_template, assigns %>
+    </main>
+    <script src="<%= static_path(@conn, "/js/login_1.js") %>"></script>
   </body>
 </html>

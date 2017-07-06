@@ -28,18 +28,6 @@ config :parp_server, ParpServer.Endpoint,
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
-config :logger,
-  backends: [{LoggerFileBackend, :info},
-             {LoggerFileBackend, :error}]
-
-config :logger, :info,
-  path: "./logs/info.log",
-  level: :info
-
-config :logger, :error,
-  path: "./logs/error.log",
-  level: :error
-
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20

@@ -1,0 +1,25 @@
+.login-hint {
+  position: relative;
+  padding-top: 20px;
+  color: cadetblue;
+}
+
+.login-row {
+  background: #fff;
+  padding: 24px;
+  min-height: 830px;
+  .ant-row {
+    position: relative;
+    padding-top: 20px;
+    padding-left: 20px
+  }
+  .ant-card{
+    position: relative;
+    top: 30px;
+  }
+}
+
+#login-row2 {
+  position: relative;
+  transform: translateY(100%);
+}
