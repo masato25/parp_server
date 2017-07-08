@@ -39,7 +39,8 @@ defmodule ParpServer.Mixfile do
      {:gettext, "~> 0.11"},
      {:timex, "~> 3.0"},
      {:cowboy, "~> 1.0"},
-     {:logger_file_backend, "~> 0.0"}
+     {:logger_file_backend, "~> 0.0"},
+     {:httpoison, "~> 0.12"}
     ]
   end
 

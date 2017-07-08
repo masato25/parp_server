@@ -10,7 +10,8 @@ config :parp_server,
   ecto_repos: [ParpServer.Repo],
   login_password: "passwd",
   token_key: "key",
-  google_api_key: "gkey"
+  google_api_key: "gkey",
+  openalpr_key: "okey"
 
 # Configures the endpoint
 config :parp_server, ParpServer.Endpoint,

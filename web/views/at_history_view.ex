@@ -15,6 +15,8 @@ defmodule ParpServer.AtHistoryView do
       start_at: TS.naiveTimeConver(at_history.start_at),
       end_at: TS.naiveTimeConver(at_history.end_at),
       status: at_history.status,
-      avatar_id: at_history.avatar_id}
+      avatar_id: at_history.avatar_id,
+      car_id: at_history.car_id,
+    }
   end
 end

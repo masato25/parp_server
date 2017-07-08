@@ -5,6 +5,7 @@ defmodule ParpServer.AtHistory do
     field :start_at, :naive_datetime
     field :end_at, :naive_datetime
     field :status, :string
+    field :car_id, :integer
     belongs_to :avatar, ParpServer.Avatar
 
     timestamps()
@@ -15,7 +16,7 @@ defmodule ParpServer.AtHistory do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:start_at, :end_at, :status, :avatar_id])
+    |> cast(params, [:start_at, :end_at, :status, :avatar_id, :car_id])
     |> validate_required([:status])
   end
 end
