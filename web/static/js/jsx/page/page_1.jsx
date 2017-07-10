@@ -3,10 +3,11 @@ import React from 'react';
 import ifetch from '../common/fetch.js'
 import { PageHeader } from '../common/page_header.jsx'
 import _ from 'lodash';
-import { Layout, Breadcrumb, DatePicker, Table, Icon, Row, Col, Card, Tag, Tooltip, Checkbox, Switch } from 'antd';
+import { Layout, Breadcrumb, DatePicker, Table, Icon, Row, Col, Card, Tag, Tooltip, Checkbox, Switch, Input } from 'antd';
 const { Header, Content, Footer } = Layout;
 import moment from 'moment';
 require("./css/falcon.scss");
+const Search = Input.Search;
 
 const columns = [{
   title: 'Name',
@@ -38,8 +39,9 @@ class MyPage1 extends React.Component {
     super(props)
     this.state = {
       tdata: [],
+      tdataTmp: [],
     }
-    this.onEndChange = this.onEndChange.bind(this)
+    this.onSearch = this.onSearch.bind(this)
     this.fetchData = this.fetchData.bind(this)
   }
   componentWillMount(){
@@ -52,19 +54,37 @@ class MyPage1 extends React.Component {
         self.setState((p, n) => {
           return {
             tdata: stories.data,
+            tdataTmp: stories.data,
           }
         })
       })
   }
-  onEndChange(){}
+  onSearch(val){
+    const newT = _.filter(this.state.tdataTmp, (v) => {
+      if (v.name.indexOf(val) !== -1) {
+        return true
+      }else{
+        return false
+      }
+    })
+    this.setState((p, n) => {
+      return {
+        tdata: newT
+      }
+    })
+  }
   render () {
     return (
       <Layout className="layout">
         <PageHeader />
         <Content style={{ padding: '0 50px' }}>
-
           <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
             <Row>
+              <Search
+                placeholder="input search text"
+                style={{ width: 200 }}
+                onSearch={(value) => this.onSearch(value)}
+              />
               <Card title="sensors">
                 <Table dataSource={this.state.tdata} columns={columns} />
               </Card>

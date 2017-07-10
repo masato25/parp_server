@@ -20,7 +20,8 @@ defmodule ParpServer.AvatarView do
       bluetooth_type: avatar.bluetooth_type,
       inserted_at: converTime(avatar.inserted_at),
       latest_report: converTime(avatar.latest_report),
-      coordinate: avatar.coordinate
+      coordinate: avatar.coordinate,
+      price_set: avatar.price_set
     }
   end
 

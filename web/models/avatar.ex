@@ -2,7 +2,7 @@ defmodule ParpServer.Avatar do
   use ParpServer.Web, :model
   import Logger
   alias ParpServer.AtHistory
-  alias ParpServer.Helper.TimeUtils 
+  alias ParpServer.Helper.TimeUtils
   alias ParpServer.Repo
 
   schema "avatar" do
@@ -15,7 +15,8 @@ defmodule ParpServer.Avatar do
     field :latest_report, :naive_datetime
     field :user_id, :integer
     field :coordinate, :string
-
+    field :price_set, :string
+    
     has_many :av_history, AtHistory
 
     timestamps()

@@ -49,7 +49,7 @@ defmodule ParpServer.PageController do
     if is_nil(avatar) do
       Logger.info("api failed")
       conn
-      |> json(%{errMsg: "api failed"})
+      |> json(%{errMsg: "api failed", name: name})
     else
       openalpr_key = Application.get_env(:parp_server, :openalpr_key)
       {status, resp} = HTTPoison.post("https://api.openalpr.com/v2/recognize_bytes?secret_key=#{openalpr_key}&recognize_vehicle=0&country=us&return_image=0&topn=10", img, [{"Content-Type", "application/json"}])
