@@ -57,15 +57,23 @@ defmodule ParpServer.PageController do
         :ok ->
           Logger.info(":ok")
           c = Poison.decode!(resp.body)
-          plate = c["results"] |> hd |> Map.get("candidates") |> hd |> Map.get("plate")
-          at = Avatar.findLastAtHistory(avatar)
-          acar = Car.changeset(%Car{}, %{"plate": plate, "detected_data": resp.body, "picture": img})
-          {:ok, catat} = Repo.insert(acar)
-          Logger.info(":ok2")
-          {:ok, t2} = AtHistory.changeset(at, %{"car_id": Map.get(catat, :id)}) |> Repo.update
-          IO.inspect t2
-          conn
-          |> json(%{msg: "hello", plate: plate, data: c})
+          results = c["results"]
+          if results != [] do
+                Logger.info("reuslt != []")
+                  plate = c["results"] |> hd |> Map.get("candidates") |> hd |> Map.get("plate")
+                  at = Avatar.findLastAtHistory(avatar)
+                  acar = Car.changeset(%Car{}, %{"plate": plate, "detected_data": resp.body, "picture": img})
+                  {:ok, catat} = Repo.insert(acar)
+                  Logger.info(":ok2")
+                  {:ok, t2} = AtHistory.changeset(at, %{"car_id": Map.get(catat, :id)}) |> Repo.update
+                  IO.inspect t2
+                  conn
+                  |> json(%{msg: "hello", plate: plate, data: c})
+          else
+                Logger.info("reuslt == []")
+                conn |>
+                json(%{errMag: "no found plate"})
+          end
         :error ->
           Logger.info(":error")
           IO.inspect resp
