@@ -18,20 +18,17 @@ defmodule  ParpServer.ParkingJudge do
   end
 
   def cleanTimeOutParking() do
-    # set timeout is 20 sec
-    timeOutBase = Timex.to_unix(Timex.now) - (20)
-      |>  TimeUtils.converUnixTs
-      |>  Timex.to_erl
-      |>  NaiveDateTime.from_erl!
-    avatars = Repo.all(
-      from avatar in Avatar,
-      where: avatar.latest_report < ^timeOutBase
+    ats = Repo.all(
+      from atHistory in AtHistory,
+      where: atHistory.status == ^"parking"
     )
-    Enum.each(avatars, fn avatar ->
-      atHistory = Avatar.findLastAtHistory(avatar)
-      if !is_nil(atHistory) do
-        changeset = AtHistory.changeset(atHistory, %{end_at: TimeUtils.naiveTimeNow, status: "leave"})
-        Repo.update(changeset)
+    Enum.each(ats, fn at ->
+      avatar = Repo.get!(Avatar, Map.get(at, :avatar_id))
+      ut = Map.get(avatar, :latest_report) |> TimeUtils.convertNaiveToUnix
+      # 如果最後上報時間相差50秒才更新
+      if (Timex.to_unix(Timex.now) - ut ) > 60 do
+          changeset = AtHistory.changeset(at, %{end_at: TimeUtils.naiveTimeNow, status: "leave"})
+          Repo.update(changeset)
       end
     end)
   end
@@ -41,7 +38,6 @@ defmodule  ParpServer.ParkingJudge do
   end
 
   def handle_info(:cleanTimeOutParking, state) do
-    # Logger.info("will talke 2")
     cleanTimeOutParking()
     schedule_work()
     {:noreply, state}
