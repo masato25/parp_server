@@ -34,7 +34,7 @@ defmodule  ParpServer.ParkingJudge do
   end
 
   defp schedule_work() do
-    Process.send_after(self(), :cleanTimeOutParking, (10 * 1000))
+    Process.send_after(self(), :cleanTimeOutParking, (60 * 1000))
   end
 
   def handle_info(:cleanTimeOutParking, state) do
