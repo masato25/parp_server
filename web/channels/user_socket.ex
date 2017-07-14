@@ -2,7 +2,7 @@ defmodule ParpServer.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", ParpServer.RoomChannel
+  channel "rooms:*", ParpServer.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
