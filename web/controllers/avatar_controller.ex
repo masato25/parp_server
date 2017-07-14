@@ -95,7 +95,7 @@ defmodule ParpServer.AvatarController do
     send_resp(conn, :no_content, "")
   end
 
-  def avatar_leave_pakring(conn, %{"address" => address}) do
+  def avatar_leave_parking(conn, %{"address" => address}) do
     avatar = Repo.all(from ava in Avatar,
                       where: ava.address == ^address)
     if avatar == [] do

@@ -27,7 +27,7 @@ defmodule ParpServer.Router do
   scope "/api", ParpServer do
     pipe_through :api
     resources "/avatars", AvatarController
-    post "/avatar_leave_pakring", AvatarController, :avatar_leave_pakring
+    post "/avatar_leave_parking", AvatarController, :avatar_leave_parking
     resources "/at_hisotry", AtHistoryController
     get "/avatar_get_at/:id", AtHistoryController, :showbyAvatar
     post "/avatar_no_found_update_all", AtHistoryController, :no_avatar
