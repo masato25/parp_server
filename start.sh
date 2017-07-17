@@ -1,1 +1,1 @@
-MIX_ENV=dev elixir --detached --sname parp -S mix phoenix.server
+MIX_ENV=prod elixir --detached --sname parp -S mix phoenix.server
