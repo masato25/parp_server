@@ -144,9 +144,6 @@ class Avatar1 extends React.Component {
         <Content style={{ padding: '0 50px' }}>
           <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
             <Row>
-              <Card title="停車紀錄">
-                <Table dataSource={this.state.tdata} columns={this.state.columns} />
-              </Card>
               <Card title="Map">
                 <div style={{overflow: 'hidden', height: '440px', width: '700px'}}>
                   <div id='gmap_canvas' style={{height: '440px', width: '700px'}}></div>

@@ -42,7 +42,16 @@ class PageHeader extends React.Component {
               PARP
             </span>
           </Menu.Item>
-          <Menu.Item key="2"><a href="/">Test</a></Menu.Item>
+          <Menu.Item key="2"><a href="/">Index</a></Menu.Item>
+          <Menu.Item key="3">
+            <a href="/file/ReadApp.pdf">App使用說明</a>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <a href="/file/HelloPARP_release1.apk">
+              download:
+              <img style={{height: "30px",  position: "relative", top: "10px"}} src="/file/android-market-store.png"></img>
+            </a>
+          </Menu.Item>
         </Menu>
       </Header>
     )
