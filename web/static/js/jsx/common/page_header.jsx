@@ -8,8 +8,10 @@ class PageHeader extends React.Component {
     this.state = {
       selectedkey: '2',
       theme: 'dark',
+      logined: false,
     }
     this.setkey = this.setkey.bind(this)
+    this.getCookie = this.getCookie.bind(this)
   }
   componentWillMount(){
     if (window.location.href.includes("daily")) {
@@ -17,42 +19,59 @@ class PageHeader extends React.Component {
     } else {
       this.setState({selectedkey: '2'})
     }
+    const logined = this.getCookie()
+    if (logined != '') {
+      this.setState({
+        logined: true
+      })
+    }else{
+      this.setState({
+        logined: false
+      })
+    }
   }
   setkey(e){
-    console.log(e)
     if (e.target.value == '1') {
       this.setState({selectedkey: '2'})
     } else {
       this.setState({selectedkey: e.target.value})
     }
   }
+  getCookie(){
+    let a = `; ${document.cookie}`.match(`;\\s*extoken=([^;]+)`);
+    return a ? a[1] : '';
+  }
   render () {
     return (
       <Header>
         <div className="logo" />
-        <Menu
-          theme={this.state.theme}
-          mode="horizontal"
-          selectedKeys={[this.state.selectedkey]}
-          onChange={this.setkey}
-          style={{ lineHeight: '64px' }}
-        >
-          <Menu.Item key="1">
-            <span style={{position: "relative", top: "10px", right: "10px"}}>
-              PARP
-            </span>
-          </Menu.Item>
-          <Menu.Item key="2"><a href="/">Index</a></Menu.Item>
-          <Menu.Item key="3">
-            <a href="/file/ReadApp.pdf">App使用說明</a>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <a href="/file/HelloPARP_release1.apk">
-              download:
-              <img style={{height: "30px",  position: "relative", top: "10px"}} src="/file/android-market-store.png"></img>
-            </a>
-          </Menu.Item>
-        </Menu>
+        {this.state.logined &&
+          <Menu
+            theme={this.state.theme}
+            mode="horizontal"
+            selectedKeys={[this.state.selectedkey]}
+            onChange={this.setkey}
+            style={{ lineHeight: '64px' }}
+          >
+            <Menu.Item key="1">
+              <span style={{position: "relative", top: "10px", right: "10px"}}>
+                PARP
+              </span>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <a href="/">Index</a>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <a href="/file/ReadApp.pdf">App使用說明</a>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <a href="/file/HelloPARP_release1.apk">
+                download:
+                <img style={{height: "30px",  position: "relative", top: "10px"}} src="/file/android-market-store.png"></img>
+              </a>
+            </Menu.Item>
+          </Menu>
+        }
       </Header>
     )
   }

@@ -21,7 +21,7 @@ logs/
 mix.lock
 yarn.lock
 priv/static/css
-priv/static/js  
+priv/static/js
 priv/static/vendor
 priv/static/file/*.apk
 priv/static/file/*.pdf

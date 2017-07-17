@@ -152,12 +152,10 @@ class Avatar1 extends React.Component {
                         <a href="http://embedgooglemaps.com">Click here to generate yourmap!</a>
                       </small>
                     </div>
-                    <div>
-                      <small>
-                        <a href="https://premiumlinkgenerator.com/4shared-com">Check out the most trusted file hosts at premiumlinkgenerator.com!</a>
-                      </small>
-                    </div>
                 </div>
+              </Card>
+              <Card title="停車紀錄">
+                <Table dataSource={this.state.tdata} columns={this.state.columns} />
               </Card>
             </Row>
           </div>
