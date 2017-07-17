@@ -29,6 +29,7 @@ defmodule  ParpServer.ParkingJudge do
       if (Timex.to_unix(Timex.now) - ut ) > 240 do
           changeset = AtHistory.changeset(at, %{end_at: TimeUtils.naiveTimeNow, status: "leave"})
           Repo.update(changeset)
+          Avatar.setPakringStatus(avatar, "available")
       end
     end)
   end

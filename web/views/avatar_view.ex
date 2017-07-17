@@ -21,7 +21,8 @@ defmodule ParpServer.AvatarView do
       inserted_at: converTime(avatar.inserted_at),
       latest_report: converTime(avatar.latest_report),
       coordinate: avatar.coordinate,
-      price_set: avatar.price_set
+      price_set: avatar.price_set,
+      parking_status: avatar.parking_status
     }
   end
 

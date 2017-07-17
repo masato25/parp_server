@@ -1,6 +1,6 @@
 defmodule ParpServer.Helper.AvatarOps do
   alias ParpServer.Avatar
-  alias ParpServer.AtHistory 
+  alias ParpServer.AtHistory
   alias ParpServer.Helper.TimeUtils
   alias ParpServer.Repo
   import Ecto.Query
@@ -67,10 +67,11 @@ defmodule ParpServer.Helper.AvatarOps do
       if is_nil(at_history) do
         Logger.info("error: no any parking info of #{avatar}")
       else
-        avatar = AtHistory.changeset(at_history, %{status: "leave", end_at: TimeUtils.naiveTimeNow})
-        case Repo.update(avatar) do
+        changeset = AtHistory.changeset(at_history, %{status: "leave", end_at: TimeUtils.naiveTimeNow})
+        case Repo.update(changeset) do
           {:ok, changeset} ->
-          Logger.info("avatar delete with address: #{address}")
+            Avatar.setPakringStatus(avatar, "available")
+            Logger.info("avatar delete with address: #{address}")
           {:error, changeset} ->
             Logger.error("[avatar_leave_pakring] update at_history got error: #{IO.inspect Map.get(changeset, :errors)}")
         end

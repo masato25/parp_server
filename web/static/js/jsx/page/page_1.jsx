@@ -16,19 +16,23 @@ const columns = [{
   render: (text, record) => (
     <a href={`/avatar/${record.id}`}>{text}</a>
   )
-}, {
+},{
   title: 'Address',
   dataIndex: 'address',
   key: 'address',
-}, {
+},{
+ title: 'status',
+ dataIndex: 'parking_status',
+ key: 'parking_status',
+},{
   title: 'Bluetooth Status',
   dataIndex: 'bluetooth_status',
   key: 'bluetooth_status',
-}, {
+},{
   title: 'latest report',
   dataIndex: 'latest_report',
   key: 'latest_report',
-}, {
+},{
   title: 'Insert at',
   dataIndex: 'inserted_at',
   key: 'inserted_at',

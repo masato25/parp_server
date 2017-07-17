@@ -1,7 +1,7 @@
 defmodule ParpServer.AvatarController do
   use ParpServer.Web, :controller
   alias ParpServer.Avatar
-  alias ParpServer.AtHistory 
+  alias ParpServer.AtHistory
   alias ParpServer.Helper.TimeUtils
   import Logger
 
@@ -41,7 +41,7 @@ defmodule ParpServer.AvatarController do
   def create(conn, %{"avatar" => avatar_params}) do
     avatar_params = Map.put(avatar_params, "latest_report", TimeUtils.naiveTimeNow)
     # check avatar is existing?
-    id = findAvatar(avatar_params) 
+    id = findAvatar(avatar_params)
     if id != -1 do
       params = %{"id" => id, "avatar" => avatar_params}
       ParpServer.AvatarController.update(conn, params)
@@ -70,6 +70,7 @@ defmodule ParpServer.AvatarController do
   def update(conn, %{"id" => id, "avatar" => avatar_params}) do
     avatar = Repo.get!(Avatar, id)
     avatar_params = Map.put(avatar_params, "updated_at", DateTime.to_unix(Timex.now))
+    avatar_params = Map.put(avatar_params, "parking_status", "parking")
     changeset = Avatar.changeset(avatar, avatar_params)
     at_history = Avatar.findLastAtHistory(avatar)
     if is_nil(at_history) do
@@ -105,7 +106,7 @@ defmodule ParpServer.AvatarController do
       if is_nil(at_history) do
         json(conn, %{error: "no any parking info of #{avatar}"})
       else
-        avatar = AtHistory.changeset(at_history, %{status: "leave", end_at: TimeUtils.naiveTimeNow})
+        avatar = AtHistory.changeset(at_history, %{status: "leave", end_at: TimeUtils.naiveTimeNow, parking_status: "available"})
         case Repo.update(avatar) do
           {:ok, changeset} ->
             json(conn, %{msg: "ok"})
