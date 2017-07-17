@@ -45,7 +45,7 @@ defmodule ParpServer.Avatar do
   
   def createAtHistory(avatar) do
     avatar_id = Map.get(avatar, :id)
-    changeset = AtHistory.changeset(%AtHistory{}, %{start_at: TimeUtils.naiveTimeNow(), status: "parking", avatar_id: avatar_id})
+    changeset = AtHistory.changeset(%AtHistory{}, %{"start_at": TimeUtils.naiveTimeNow(), "status": "parking", "avatar_id": avatar_id})
     case Repo.insert(changeset) do
       {:ok, ath} ->
         setPakringStatus(avatar, "parking")

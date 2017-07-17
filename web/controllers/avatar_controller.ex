@@ -106,7 +106,7 @@ defmodule ParpServer.AvatarController do
       if is_nil(at_history) do
         json(conn, %{error: "no any parking info of #{avatar}"})
       else
-        avatar = AtHistory.changeset(at_history, %{status: "leave", end_at: TimeUtils.naiveTimeNow, parking_status: "available"})
+        avatar = AtHistory.changeset(at_history, %{"status": "leave", "end_at": TimeUtils.naiveTimeNow, "parking_status": "available"})
         case Repo.update(avatar) do
           {:ok, changeset} ->
             json(conn, %{msg: "ok"})

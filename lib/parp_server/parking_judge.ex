@@ -27,7 +27,7 @@ defmodule  ParpServer.ParkingJudge do
       ut = Map.get(avatar, :latest_report) |> TimeUtils.convertNaiveToUnix
       # 如果最後上報時間相差240秒才更新
       if (Timex.to_unix(Timex.now) - ut ) > 240 do
-          changeset = AtHistory.changeset(at, %{end_at: TimeUtils.naiveTimeNow, status: "leave"})
+          changeset = AtHistory.changeset(at, %{"end_at": TimeUtils.naiveTimeNow, "status": "leave"})
           Repo.update(changeset)
           Avatar.setPakringStatus(avatar, "available")
       end
