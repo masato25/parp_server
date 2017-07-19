@@ -102,13 +102,16 @@ defmodule ParpServer.AvatarController do
     if avatar == [] do
       json(conn, %{error: "no found address: #{address}"})
     else
-      at_history = Avatar.findLastAtHistory(hd(avatar))
+      avatar = hd(avatar)
+      at_history = Avatar.findLastAtHistory(avatar)
       if is_nil(at_history) do
         json(conn, %{error: "no any parking info of #{avatar}"})
       else
-        avatar = AtHistory.changeset(at_history, %{"status": "leave", "end_at": TimeUtils.naiveTimeNow, "parking_status": "available"})
-        case Repo.update(avatar) do
+        changeset = AtHistory.changeset(at_history, %{"status": "leave", "end_at": TimeUtils.naiveTimeNow, "parking_status": "available"})
+        case Repo.update(changeset) do
           {:ok, changeset} ->
+            changeset = Avatar.changeset(avatar, %{"update_at": DateTime.to_unix(Timex.now),"parking_status": "available"})
+            Repo.update(changeset)
             json(conn, %{msg: "ok"})
           {:error, changeset} ->
             Logger.error("[avatar_leave_pakring] update at_history got error: #{IO.inspect Map.get(changeset, :errors)}")
