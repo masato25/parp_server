@@ -16,6 +16,52 @@
     <main role="main">
       <%= render @view_module, @view_template, assigns %>
     </main>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=<%= Application.get_env(:parp_server, :google_api_key) %>"></script>
+    <script type='text/javascript'>
+      function genPinImg(color) {
+          return {
+              path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z',
+              fillColor: color,
+              fillOpacity: 1,
+              strokeColor: '#000',
+              strokeWeight: 2,
+              scale: 1
+          }
+      }
+      // function init_maps(name, coordinate, color){
+      function init_maps(points){
+        var myOptions = {
+          zoom: 13,
+          center: new google.maps.LatLng(25.036268, 121.547752),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var bounds = new google.maps.LatLngBounds()
+        map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions)
+        for (i = 0; i < points.length; i++) {
+          var name = points[i]["name"] || "my parking"
+          var coordinate = points[i]["coordinate"] || "0,0"
+          var ct = coordinate.split(",")
+          var pinImage = genPinImg(points[i]["color"])
+          var ltn = new google.maps.LatLng(ct[0],ct[1])
+          bounds.extend(ltn)
+          var marker = new google.maps.Marker({
+            title: name,
+            map: map,
+            position: ltn,
+            icon: pinImage
+          })
+          marker['infowindow'] = new google.maps.InfoWindow({
+            content: '<strong>' + name + '</strong><br><div>' + coordinate + '</div>'
+          })
+          google.maps.event.addListener(marker, 'click', function(){
+            this['infowindow'].open(map, this)
+          })
+        }
+        map.fitBounds(bounds)
+      }
+      window.init_map = init_maps
+    </script>
+    <style>img{max-width:none!important;background:none!important}</style>
     <script src="<%= static_path(@conn, "/js/page_1.js") %>"></script>
   </body>
 </html>

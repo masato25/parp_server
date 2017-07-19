@@ -80,7 +80,7 @@ class Avatar1 extends React.Component {
     const self = this
     ifetch(`/api/avatars/${avatarId}`, 'GET')
       .then(function(stories) {
-        window.init_map(stories.data.name, stories.data.coordinate)
+        window.init_map(stories.data.name, stories.data.coordinate, "red")
         self.setState((p, n) => {
           return {
             name: stories.data.name,
@@ -144,19 +144,24 @@ class Avatar1 extends React.Component {
         <Content style={{ padding: '0 50px' }}>
           <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
             <Row>
-              <Card title="Map">
-                <div style={{overflow: 'hidden', height: '440px', width: '700px'}}>
-                  <div id='gmap_canvas' style={{height: '440px', width: '700px'}}></div>
-                    <div>
-                      <small>
-                        <a href="http://embedgooglemaps.com">Click here to generate yourmap!</a>
-                      </small>
-                    </div>
-                </div>
-              </Card>
-              <Card title="停車紀錄">
-                <Table dataSource={this.state.tdata} columns={this.state.columns} />
-              </Card>
+              <Col span={24}>
+                <Breadcrumb>
+                  <Breadcrumb.Item><a href="/">Home</a></Breadcrumb.Item>
+                  <Breadcrumb.Item><a href="">{this.state.name}</a></Breadcrumb.Item>
+                </Breadcrumb>
+              </Col>
+              <Col span={12}>
+                <Card title="Map">
+                  <div style={{overflow: 'hidden', height: '440px', width: '700px'}}>
+                    <div id='gmap_canvas' style={{height: '440px', width: '700px'}}></div>
+                  </div>
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card title="停車紀錄">
+                  <Table dataSource={this.state.tdata} columns={this.state.columns} />
+                </Card>
+              </Col>
             </Row>
           </div>
           <Modal
