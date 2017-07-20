@@ -35,7 +35,8 @@ defmodule ParpServer.Router do
 
     get "/v1/login", PageController, :login
     #for test
-    post "/v1/uploadimg", PageController, :uploadImg
+    # post "/v1/uploadimg", PageController, :uploadImg
+    post "/v1/uploadimg", PageController, :uploadImgOnly
 
     resources "/car", CarController
   end

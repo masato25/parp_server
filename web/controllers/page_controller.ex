@@ -42,6 +42,35 @@ defmodule ParpServer.PageController do
     end
   end
 
+  def uploadImgOnly(conn, params) do
+    img = Map.get(params, "img")
+    openalpr_key = Application.get_env(:parp_server, :openalpr_key)
+    {status, resp} = HTTPoison.post("https://api.openalpr.com/v2/recognize_bytes?secret_key=#{openalpr_key}&recognize_vehicle=0&country=us&return_image=0&topn=10", img, [{"Content-Type", "application/json"}])
+    case status do
+      :ok ->
+        Logger.info(":ok")
+        c = Poison.decode!(resp.body)
+        results = c["results"]
+        if results != [] do
+          Logger.info("reuslt != []")
+          plate = c["results"] |> hd |> Map.get("candidates") |> hd |> Map.get("plate")
+          acar = Car.changeset(%Car{}, %{"plate": plate, "detected_data": resp.body, "picture": img})
+          {:ok, _} = Repo.insert(acar)
+          conn
+          |> json(%{msg: "hello", plate: plate, data: c})
+        else
+          Logger.info("reuslt == []")
+          conn |>
+          json(%{errMag: "no found plate"})
+        end
+      :error ->
+        Logger.info(":error")
+        IO.inspect resp
+        conn
+        |> json(%{errMsg: "api request failed"})
+    end
+  end
+
   def uploadImg(conn, params) do
     name = Map.get(params, "name")
     avatar = queryAvatarByName(name)
@@ -59,20 +88,20 @@ defmodule ParpServer.PageController do
           c = Poison.decode!(resp.body)
           results = c["results"]
           if results != [] do
-                Logger.info("reuslt != []")
-                  plate = c["results"] |> hd |> Map.get("candidates") |> hd |> Map.get("plate")
-                  at = Avatar.findLastAtHistory(avatar)
-                  acar = Car.changeset(%Car{}, %{"plate": plate, "detected_data": resp.body, "picture": img})
-                  {:ok, catat} = Repo.insert(acar)
-                  Logger.info(":ok2")
-                  {:ok, t2} = AtHistory.changeset(at, %{"car_id": Map.get(catat, :id)}) |> Repo.update
-                  IO.inspect t2
-                  conn
-                  |> json(%{msg: "hello", plate: plate, data: c})
+            Logger.info("reuslt != []")
+            plate = c["results"] |> hd |> Map.get("candidates") |> hd |> Map.get("plate")
+            at = Avatar.findLastAtHistory(avatar)
+            acar = Car.changeset(%Car{}, %{"plate": plate, "detected_data": resp.body, "picture": img})
+            {:ok, catat} = Repo.insert(acar)
+            Logger.info(":ok2")
+            {:ok, t2} = AtHistory.changeset(at, %{"car_id": Map.get(catat, :id)}) |> Repo.update
+            IO.inspect t2
+            conn
+            |> json(%{msg: "hello", plate: plate, data: c})
           else
-                Logger.info("reuslt == []")
-                conn |>
-                json(%{errMag: "no found plate"})
+            Logger.info("reuslt == []")
+            conn |>
+            json(%{errMag: "no found plate"})
           end
         :error ->
           Logger.info(":error")
