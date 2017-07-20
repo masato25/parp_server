@@ -112,7 +112,7 @@ class MyPage1 extends React.Component {
   filterDemo(data){
     const newData = _.chain(data)
     .filter((b) => {
-      return b.name.indexOf("BLE") >= 0
+      return b.name.indexOf("PARP") >= 0
     }).value()
     return {
       tdata: newData,

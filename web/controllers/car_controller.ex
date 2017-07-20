@@ -52,4 +52,10 @@ defmodule ParpServer.CarController do
 
     send_resp(conn, :no_content, "")
   end
+
+  def indexhtml(conn, _) do
+    conn |>
+    put_layout("car.html") |>
+    render("car.html", %{})
+  end
 end

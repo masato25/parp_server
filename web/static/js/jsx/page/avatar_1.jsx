@@ -22,6 +22,7 @@ class Avatar1 extends React.Component {
       columns: [],
       carInfo: {},
       price_set: '* 0',
+      carload: true,
     }
     this.onEndChange = this.onEndChange.bind(this)
     this.fetchData = this.fetchData.bind(this)
@@ -106,12 +107,16 @@ class Avatar1 extends React.Component {
   }
   showModal(e){
     self = this
-    ifetch(`/api/car/${e.target.text}`, 'GET')
+    self.setState({
+      carload: true
+    })
+    ifetch(`/api/v1/car/${e.target.text}`, 'GET')
       .then(function(stories) {
         console.log(stories)
         self.setState((p, n) => {
           return {
             carInfo: stories.data,
+            carload: false,
           }
         })
       })
@@ -172,8 +177,9 @@ class Avatar1 extends React.Component {
           >
             <p>停車車籍資訊</p>
             <div>車牌: {this.state.carInfo.plate}</div>
-            <img src={this.genBaseEmb()}/>
-
+            <Card loading={this.state.carload}>
+              <img src={this.genBaseEmb()}/>
+            </Card>
           </Modal>
         </Content>
         <Footer style={{ textAlign: 'center' }}>

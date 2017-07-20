@@ -11,6 +11,7 @@ module.exports = {
     page_1: phoenixStaticPath + "/js/jsx/page/page_1.jsx",
     avatar_1: phoenixStaticPath + "/js/jsx/page/avatar_1.jsx",
     login_1: phoenixStaticPath + "/js/jsx/login/login_1.jsx",
+    car_1: phoenixStaticPath + "/js/jsx/car/car_1.jsx",
     app: phoenixStaticPath + "/css/app.scss",
   },
   output: {

@@ -21,6 +21,7 @@ defmodule ParpServer.Router do
     get "/", AvatarController, :indexhtml
     get "/avatar/:id", AvatarController, :avatar1html
     get "/login", PageController, :loginhtml
+    get "/car", CarController, :indexhtml
   end
 
   # Other scopes may use custom stacks.
@@ -38,6 +39,6 @@ defmodule ParpServer.Router do
     # post "/v1/uploadimg", PageController, :uploadImg
     post "/v1/uploadimg", PageController, :uploadImgOnly
 
-    resources "/car", CarController
+    resources "/v1/car", CarController
   end
 end

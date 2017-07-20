@@ -55,11 +55,11 @@ class PageHeader extends React.Component {
           >
             <Menu.Item key="1">
               <span style={{position: "relative", top: "10px", right: "10px"}}>
-                PARP
+                <a href="/">PARP</a>
               </span>
             </Menu.Item>
             <Menu.Item key="2">
-              <a href="/">Index</a>
+              <a href="/car">影像辨識試驗區</a>
             </Menu.Item>
             <Menu.Item key="3">
               <a href="/file/ReadApp.pdf">App使用說明</a>
