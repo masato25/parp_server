@@ -92,7 +92,7 @@ class MyPage1 extends React.Component {
           color: "red"
         }
       }
-    }).sortedUniqBy((b) => { return b.coordinate}).take(30).value()
+    }).sortedUniqBy((b) => { return b.coordinate}).take(50).value()
     window.init_map(dt)
   }
   onSearch(val){
