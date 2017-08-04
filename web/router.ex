@@ -14,6 +14,10 @@ defmodule ParpServer.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :uapi do
+    plug :accepts, ["json"]
+  end
+
   scope "/", ParpServer do
     pipe_through :browser # Use the default browser stack
 
@@ -41,4 +45,11 @@ defmodule ParpServer.Router do
 
     resources "/v1/car", CarController
   end
+
+  scope "/api", ParpServer do
+    pipe_through :uapi
+    resources "/v1/session", SessionController, only: [:delete]
+    post "/v1/current_user", SessionController, :sessionCheck
+  end
+
 end
