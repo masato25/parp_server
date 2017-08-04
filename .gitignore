@@ -25,3 +25,4 @@ priv/static/js
 priv/static/vendor
 priv/static/file/*.apk
 priv/static/file/*.pdf
+/*.sql
