@@ -120,4 +120,17 @@ defmodule ParpServer.AvatarController do
       end
     end
   end
+
+  def getParkingPlaceByStatus(conn, %{"status" => status}) do
+    avatars = Repo.all( from c in Avatar,
+      where: c.parking_status == ^status
+    )
+    render(conn, "index.json", avatar: avatars)
+  end
+
+  def getParkingPlaceByStatus(conn, _params) do
+    avatars = Repo.all(Avatar)
+    render(conn, "index.json", avatar: avatars)
+  end
+
 end

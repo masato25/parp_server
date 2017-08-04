@@ -44,6 +44,7 @@ defmodule ParpServer.Router do
     post "/v1/uploadimg", PageController, :uploadImgOnly
 
     resources "/v1/car", CarController
+    get "/v1/get_car_list", AvatarController, :getParkingPlaceByStatus
   end
 
   scope "/api", ParpServer do
