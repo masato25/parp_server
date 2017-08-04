@@ -17,6 +17,7 @@ defmodule ParpServer.Avatar do
     field :coordinate, :string
     field :price_set, :string
     field :parking_status, :string
+    field :reservation_at, :naive_datetime
 
     has_many :av_history, AtHistory
 
@@ -43,7 +44,7 @@ defmodule ParpServer.Avatar do
         nil
     end
   end
-  
+
   def createAtHistory(avatar) do
     avatar_id = Map.get(avatar, :id)
     changeset = AtHistory.changeset(%AtHistory{}, %{"start_at": TimeUtils.naiveTimeNow(), "status": "parking", "avatar_id": avatar_id})
