@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :parp_server, ParpServer.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "root",
+  password: "",
   database: "parp_server_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
