@@ -36,8 +36,8 @@ defmodule ParpServer.Router do
     resources "/at_hisotry", AtHistoryController
     get "/avatar_get_at/:id", AtHistoryController, :showbyAvatar
     post "/avatar_no_found_update_all", AtHistoryController, :no_avatar
-    resources "/user", UserController
-
+    resources "/v1/user", UserController
+    post "/v1/login", UserController, :login
     get "/v1/login", PageController, :login
     #for test
     # post "/v1/uploadimg", PageController, :uploadImg
