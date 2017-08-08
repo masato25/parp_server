@@ -44,11 +44,11 @@ defmodule ParpServer.AvatarController do
   def create(conn, %{"avatar" => avatar_params}) do
     avatar_params = Map.put(avatar_params, "latest_report", TimeUtils.naiveTimeNow)
     # check avatar is existing?
-    id = findAvatar(avatar_params)
-    if id != -1 do
-      params = %{"id" => id, "avatar" => avatar_params}
-      ParpServer.AvatarController.update(conn, params)
-    else
+    # id = findAvatar(avatar_params)
+    # if id != -1 do
+      # params = %{"id" => id, "avatar" => avatar_params}
+      # ParpServer.AvatarController.update(conn, params)
+    # else
       changeset = Avatar.changeset(%Avatar{}, avatar_params)
       case Repo.insert(changeset) do
         {:ok, avatar} ->
@@ -62,7 +62,7 @@ defmodule ParpServer.AvatarController do
           |> put_status(:unprocessable_entity)
           |> render(ParpServer.ChangesetView, "error.json", changeset: changeset)
       end
-    end
+    # end
   end
 
   def show(conn, %{"id" => id}) do
@@ -72,12 +72,14 @@ defmodule ParpServer.AvatarController do
 
   def update(conn, %{"id" => id, "avatar" => avatar_params}) do
     avatar = Repo.get!(Avatar, id)
-    avatar_params = Map.put(avatar_params, "updated_at", DateTime.to_unix(Timex.now))
-    avatar_params = Map.put(avatar_params, "parking_status", "parking")
+    # avatar_params = Map.put(avatar_params, "updated_at", DateTime.to_unix(Timex.now))
+    # avatar_params = Map.put(avatar_params, "parking_status", "parking")
     changeset = Avatar.changeset(avatar, avatar_params)
-    at_history = Avatar.findLastAtHistory(avatar)
-    if is_nil(at_history) do
-      Avatar.createAtHistory(avatar)
+    if Map.get(avatar_params, "parking_status") == "paring" do
+      at_history = Avatar.findLastAtHistory(avatar)
+      if is_nil(at_history) do
+        Avatar.createAtHistory(avatar)
+      end
     end
     case Repo.update(changeset) do
       {:ok, avatar} ->
