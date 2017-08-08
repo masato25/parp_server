@@ -35,8 +35,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :parp_server, ParpServer.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "root",
-  password: "",
+  username: "postgres",
+  password: "password",
   database: "parp_server_dev",
   hostname: "localhost",
   pool_size: 10

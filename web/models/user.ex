@@ -21,10 +21,17 @@ defmodule ParpServer.User do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name, :gender, :birthday, :parking_license, :password, :payment, :username])
-    |> validate_required([:name, :gender, :birthday, :parking_license])
+    |> validate_required([:name, :username, :parking_license])
+    |> unique_constraint(:username)
     |> hashpassword()
   end
 
+  def changeset_update(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:name, :gender, :birthday, :parking_license, :password, :payment, :username])
+    |> unique_constraint(:username)
+    |> hashpassword()
+  end
 
   defp hashpassword(data) do
     pmap = Map.get(data, :changes, %{})

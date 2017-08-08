@@ -1,8 +1,11 @@
 defmodule ParpServer.AvatarController do
   use ParpServer.Web, :controller
+  alias ParpServer.Helper.ApiHelp
   alias ParpServer.Avatar
+  alias ParpServer.Session
   alias ParpServer.AtHistory
   alias ParpServer.Helper.TimeUtils
+  use PhoenixSwagger
   import Logger
 
   def indexhtml(conn, _params) do
@@ -122,15 +125,168 @@ defmodule ParpServer.AvatarController do
   end
 
   def getParkingPlaceByStatus(conn, %{"status" => status}) do
-    avatars = Repo.all( from c in Avatar,
-      where: c.parking_status == ^status
-    )
-    render(conn, "index.json", avatar: avatars)
+    avatars = []
+    flag = true
+    case status do
+      "parking" ->
+        avatars = Repo.all( from c in Avatar,
+          where: c.parking_status == "parking"
+        )
+      "available" ->
+        avatars = Repo.all( from c in Avatar,
+          where: c.parking_status == "available"
+        )
+      "can_resv" ->
+        avatars = Repo.all( from c in Avatar,
+          where: c.parking_status == "available" and is_nil(c.user_id)
+        )
+      "all" ->
+        avatars = Repo.all(Avatar)
+      _ ->
+        flag = false
+        json(conn, %{"error": "status type is wrong"})
+    end
+
+    if flag do
+      render(conn, "index.json", avatar: avatars)
+    end
   end
 
   def getParkingPlaceByStatus(conn, _params) do
     avatars = Repo.all(Avatar)
     render(conn, "index.json", avatar: avatars)
+  end
+
+  def reservationParking(conn, %{"parking_id" => parking_id, "rs" => rs}) do
+    session = ApiHelp.getSessionFromHeader(conn)
+    if session == - 1 do
+      json(conn, %{"error": "session not vaild"})
+    else
+      myuser = Session.checkSession(session)
+      if !myuser do
+        json(conn, %{"error": "session not vaild"})
+      else
+        avatar = Repo.all(from at in Avatar,
+          where: at.id == ^parking_id,
+          limit: 1)
+        cond do
+          avatar == [] ->
+            json(conn, %{"error": "parking id not found"})
+          is_nil(Map.get(hd(avatar), :user_id, nil)) && rs == true->
+            json(conn, %{"error": "parking id not available"})
+          rs == "false" ->
+            avatar = avatar |> hd
+            changeset = Avatar.changeset(avatar, %{user_id: nil, reservation_at: nil})
+            case Repo.update(changeset) do
+              {:ok, avatar} ->
+                render(conn, "show.json", avatar: avatar)
+              {:error, changeset} ->
+                conn
+                |> put_status(:unprocessable_entity)
+                |> render(ParpServer.ChangesetView, "error.json", changeset: changeset)
+            end
+          true ->
+            avatar = avatar |> hd
+            uid = Map.get(myuser, :id)
+            timeNow = DateTime.utc_now |> DateTime.to_naive
+            changeset = Avatar.changeset(avatar, %{user_id: uid, reservation_at: timeNow})
+            case Repo.update(changeset) do
+              {:ok, avatar} ->
+                render(conn, "show.json", avatar: avatar)
+              {:error, changeset} ->
+                conn
+                |> put_status(:unprocessable_entity)
+                |> render(ParpServer.ChangesetView, "error.json", changeset: changeset)
+            end
+        end
+      end
+    end
+  end
+
+  # swagger #
+  swagger_path :getParkingPlaceByStatus do
+    get "/v1/get_car_list"
+    produces "application/json"
+    description "Get parking with status filter, 支援狀態 [praking, available, can_resv, all]  -> (ps. can_resv 表示該車位沒人停可以預約)"
+    parameters do
+      status :query, :string, "parking", required: false
+    end
+    response(200, """
+      {
+        "data": [
+          {
+            "price_set": " / 3600 * 20",
+            "parking_status": "available",
+            "name": "Drive+",
+            "latest_report": "2017-07-18 09:02:11",
+            "inserted_at": "2017-07-18 09:02:11",
+            "id": 22,
+            "custom_name": null,
+            "coordinate": "25.0405821,121.5686972",
+            "bluetooth_type": 1,
+            "bluetooth_status": 10,
+            "address": "10:C6:FC:EE:DE:9C"
+          },
+          {
+            "price_set": " / 3600 * 20",
+            "parking_status": "available",
+            "name": "S8np0750",
+            "latest_report": "2017-07-18 09:21:06",
+            "inserted_at": "2017-07-18 09:21:06",
+            "id": 39,
+            "custom_name": null,
+            "coordinate": "25.0379561,121.5687641",
+            "bluetooth_type": 1,
+            "bluetooth_status": 10,
+            "address": "6C:5C:14:56:69:39"
+          },
+          {
+            "price_set": " / 3600 * 20",
+            "parking_status": "available",
+            "name": "bike:D193D7F05N400",
+            "latest_report": "2017-07-18 09:11:31",
+            "inserted_at": "2017-07-18 09:10:36",
+            "id": 27,
+            "custom_name": null,
+            "coordinate": "25.0405821,121.5686972",
+            "bluetooth_type": 2,
+            "bluetooth_status": 10,
+            "address": "C8:FD:19:3D:7F:05"
+          }
+        ]
+      }
+    """)
+  end
+
+  # swagger #
+  swagger_path :reservationParking do
+    get "/api//v1/reservation_parking"
+    produces "application/json"
+    description "預約 or 取消預約停車資訊, rs 為 true 為預約 re 為 false 為取消預約"
+    parameters do
+      parking_id :query, :integer, "10", required: true
+      rs :query, :boolean , "true", required: true
+      authorization :header, :string, "parpuser1 NegZIJa8Q3QP57-g", required: true
+    end
+    response(200, """
+      {
+        "data": {
+          "user_id": 8,
+          "reservation_at": 1501921695,
+          "price_set": " / 3600 * 20",
+          "parking_status": "available",
+          "name": "nuvi #3848828232",
+          "latest_report": "2017-07-18 08:59:49",
+          "inserted_at": "2017-07-18 08:59:49",
+          "id": 10,
+          "custom_name": null,
+          "coordinate": "25.0405821,121.5686972",
+          "bluetooth_type": 1,
+          "bluetooth_status": 10,
+          "address": "10:C6:FC:1E:8F:B7"
+        }
+      }
+    """)
   end
 
 end

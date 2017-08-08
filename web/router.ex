@@ -36,7 +36,9 @@ defmodule ParpServer.Router do
     resources "/at_hisotry", AtHistoryController
     get "/avatar_get_at/:id", AtHistoryController, :showbyAvatar
     post "/avatar_no_found_update_all", AtHistoryController, :no_avatar
-    resources "/v1/user", UserController
+    resources "/v1/user", UserController, except: [:update]
+    put "/v1/user", UserController, :update
+    put "/v1/chpasswd", UserController, :chpasswd
     post "/v1/login", UserController, :login
     get "/v1/login", PageController, :login
     #for test
@@ -50,7 +52,22 @@ defmodule ParpServer.Router do
   scope "/api", ParpServer do
     pipe_through :uapi
     resources "/v1/session", SessionController, only: [:delete]
-    post "/v1/current_user", SessionController, :sessionCheck
+    get "/v1/current_user", SessionController, :sessionCheck
+    get "/v1/reservation_parking", AvatarController, :reservationParking
+  end
+
+
+  scope "/api/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :parp_server, swagger_file: "parp.json", disable_validator: true
+  end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "PARP APP"
+      }
+    }
   end
 
 end

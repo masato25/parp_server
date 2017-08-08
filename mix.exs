@@ -30,17 +30,23 @@ defmodule ParpServer.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.2.4"},
-     {:phoenix_pubsub, "~> 1.0"},
-     {:phoenix_ecto, "~> 3.0"},
-     {:postgrex, github: "jumpn/postgrex", override: true},
-     {:phoenix_html, "~> 2.6"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:gettext, "~> 0.11"},
-     {:timex, "~> 3.0"},
-     {:cowboy, "~> 1.0"},
-     {:logger_file_backend, "~> 0.0"},
-     {:httpoison, "~> 0.12"}
+    [
+      {:phoenix, "~> 1.2.4"},
+      {:phoenix_pubsub, "~> 1.0"},
+      {:phoenix_ecto, "~> 3.0"},
+      {:postgrex, github: "jumpn/postgrex", override: true},
+      {:phoenix_html, "~> 2.6"},
+      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:gettext, "~> 0.11"},
+      {:timex, "~> 3.0"},
+      {:cowboy, "~> 1.0"},
+      {:logger_file_backend, "~> 0.0"},
+      {:httpoison, "~> 0.12"},
+      # support dev
+      {:credo, "~> 0.5", only: [:dev, :test]},
+      {:phoenix_swagger, "~> 0.6.2"},
+      {:ex_json_schema, "~> 0.5"},
+      {:dogma, "~> 0.1", only: [:dev]}
     ]
   end
 
@@ -51,8 +57,10 @@ defmodule ParpServer.Mixfile do
   #
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-     "ecto.reset": ["ecto.drop", "ecto.setup"],
-     "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
+    [
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
   end
 end

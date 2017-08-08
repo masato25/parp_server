@@ -1,8 +1,10 @@
 defmodule ParpServer.SessionController do
   use ParpServer.Web, :controller
-
+  alias ParpServer.Helper.ApiHelp
   alias ParpServer.Session
   alias ParpServer.User
+  require Logger
+  use PhoenixSwagger
 
   def index(conn, _params) do
     session = Repo.all(Session)
@@ -54,21 +56,50 @@ defmodule ParpServer.SessionController do
     send_resp(conn, :no_content, "")
   end
 
-  def sessionCheck(conn, %{"username" => username , "token" => token}) do
-    myuser = Session.checkSession(%{username: username , token: token})
-    if !myuser do
+  def sessionCheck(conn, _params) do
+    session = ApiHelp.getSessionFromHeader(conn)
+    if session == - 1 do
       json(conn, %{"error": "session not vaild"})
     else
-      userjson = %{
-        id: myuser.id,
-        username: myuser.username,
-        name: myuser.name,
-        gender: myuser.gender,
-        birthday: myuser.birthday,
-        parking_license: myuser.parking_license,
-        payment: myuser.payment
-      }
-      json(conn, %{user: userjson})
+      myuser = Session.checkSession(session)
+      if !myuser do
+        json(conn, %{"error": "session not vaild"})
+      else
+        userjson = %{
+          id: myuser.id,
+          username: myuser.username,
+          name: myuser.name,
+          gender: myuser.gender,
+          birthday: myuser.birthday,
+          parking_license: myuser.parking_license,
+          payment: myuser.payment
+        }
+        json(conn, %{user: userjson})
+      end
     end
+  end
+
+
+  # swagger #
+  swagger_path :sessionCheck do
+    get "/v1/current_user"
+    produces "application/json"
+    description "Get current user info && authorize session"
+    parameters do
+      authorization :header, :string, "parpuser1 NegZIJa8Q3QP57-g", required: true
+    end
+    response(200, """
+      {
+        "data": {
+          "username": "parpuser1",
+          "payment": null,
+          "parking_license": "AP-0012",
+          "name": "司馬亭",
+          "id": 5,
+          "gender": "female",
+          "birthday": "1985-07-22"
+        }
+      }
+    """)
   end
 end

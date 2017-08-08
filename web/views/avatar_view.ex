@@ -11,8 +11,13 @@ defmodule ParpServer.AvatarView do
   end
 
   def render("avatar.json", %{avatar: avatar}) do
+    reservation_at = nil
+    if !is_nil(avatar.reservation_at) do
+       reservation_at = TS.convertNaiveToUnix(avatar.reservation_at)
+    end
     %{
       id: avatar.id,
+      user_id: avatar.user_id,
       name: avatar.name,
       custom_name: avatar.custom_name,
       address: avatar.address,
@@ -22,7 +27,8 @@ defmodule ParpServer.AvatarView do
       latest_report: converTime(avatar.latest_report),
       coordinate: avatar.coordinate,
       price_set: avatar.price_set,
-      parking_status: avatar.parking_status
+      parking_status: avatar.parking_status,
+      reservation_at: reservation_at
     }
   end
 
