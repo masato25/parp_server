@@ -7,9 +7,7 @@ defmodule ParpServer.Avatar do
 
   schema "avatar" do
     field :name, :string
-    field :address, :string
-    field :bluetooth_status, :integer
-    field :bluetooth_type, :integer
+    field :sensor_id, :string
     field :latitude_longitude, :string
     field :custom_name, :string
     field :latest_report, :naive_datetime
@@ -30,9 +28,9 @@ defmodule ParpServer.Avatar do
   def changeset(struct, params \\ %{}) do
     struct
     # :coordinate, disable for demo
-    |> cast(params, [:name, :custom_name, :address, :bluetooth_status, :bluetooth_type, :latest_report, :parking_status, :reservation_at, :user_id, :coordinate])
-    |> validate_required([:address, :parking_status, :name])
-    |> unique_constraint(:address)
+    |> cast(params, [:name, :custom_name, :sensor_id, :bluetooth_status, :bluetooth_type, :latest_report, :parking_status, :reservation_at, :user_id, :coordinate])
+    |> validate_required([:sensor_id, :parking_status, :name])
+    |> unique_constraint(:sensor_id)
   end
 
   def setPakringStatus(avatar, status) do

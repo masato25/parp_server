@@ -11,9 +11,9 @@ const columns = [{
     dataIndex: 'age',
     key: 'age',
   }, {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
+    title: 'sensor_id',
+    dataIndex: 'sensor_id',
+    key: 'sensor_id',
   }, {
     title: 'Action',
     key: 'action',
@@ -34,17 +34,17 @@ const data = [{
   key: '1',
   name: 'John Brown',
   age: 32,
-  address: 'New York No. 1 Lake Park',
+  sensor_id: 'New York No. 1 Lake Park',
 }, {
   key: '2',
   name: 'Jim Green',
   age: 42,
-  address: 'London No. 1 Lake Park',
+  sensor_id: 'London No. 1 Lake Park',
 }, {
   key: '3',
   name: 'Joe Black',
   age: 32,
-  address: 'Sidney No. 1 Lake Park',
+  sensor_id: 'Sidney No. 1 Lake Park',
 }];
 
 var FalconTable = React.createClass({

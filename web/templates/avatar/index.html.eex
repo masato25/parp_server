@@ -7,9 +7,7 @@
         <thead>
           <th>id</th>
           <th>name</th>
-          <th>address</th>
-          <th>bluetooth status</th>
-          <th>bluetooth type</th>
+          <th>sensor_id</th>
           <th>status</th>
         </thead>
         <tbody>
@@ -17,9 +15,7 @@
             <%= for k <- @avatar do %>
               <td><%= k.id %></td>
               <td><%= k.name %></td>
-              <td><%= k.addr %></td>
-              <td><%= k.bluetooth_status %></td>
-              <td><%= k.btype %></td>
+              <td><%= k.sensor_id %></td>
               <td><%= k.count_status %></td>
             <% end %>
           </tr>

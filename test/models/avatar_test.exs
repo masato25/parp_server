@@ -3,7 +3,7 @@ defmodule ParpServer.AvatarTest do
 
   alias ParpServer.Avatar
 
-  @valid_attrs %{address: "some content", name: "some content"}
+  @valid_attrs %{sensor_id: "some content", name: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

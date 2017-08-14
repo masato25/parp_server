@@ -6,7 +6,7 @@
 * price_set 計算停車時間公式
 * parking_status 停車位狀態 -> ["parking", "available"]
 * name & custom_name: 依舊的情狀表示的是藍芽的名字 還有自定義的名字. 可以按照需求轉變使用
-* address: 原本是藍芽的address這邊表一個唯一的sensor的代碼. 可以依照需求轉變使用. 目前的作法都是用這個id去辨認一個sensor的狀態. 這個sensor基本上預設展示情境是綁定一個車位的.
+* sensor_id: sensor_id這邊表一個唯一的sensor的代碼. 可以依照需求轉變使用. 目前的作法都是用這個id去辨認一個sensor的狀態. 這個sensor基本上預設展示情境是綁定一個車位的.
 * coordinate 經緯度, 用","隔開
 * 其他訊息可以都不用填沒關係, 有些是之前使用藍芽模組產生的暫存狀態儲存
 
@@ -27,9 +27,7 @@ GET `/api/avatars`
       "id": 22,
       "custom_name": null,
       "coordinate": "25.0405821,121.5686972",
-      "bluetooth_type": 1,
-      "bluetooth_status": 10,
-      "address": "10:C6:FC:EE:DE:9C"
+      "sensor_id": "10:C6:FC:EE:DE:9C"
     },
     {
       "user_id": null,
@@ -42,9 +40,7 @@ GET `/api/avatars`
       "id": 39,
       "custom_name": null,
       "coordinate": "25.0379561,121.5687641",
-      "bluetooth_type": 1,
-      "bluetooth_status": 10,
-      "address": "6C:5C:14:56:69:39"
+      "sensor_id": "6C:5C:14:56:69:39"
     }]
 }
 ```
@@ -59,7 +55,7 @@ post example:
 {
   "name": "sensor-a",
   "custom_name": "測試A",
-  "address": "bluetooth address",
+  "sensor_id": "bluetooth sensor_id",
   "parking_status": "available",
   "coordinate": "25.0379561,121.5687641"
   "price_set": " / 3600 * 20"
@@ -76,7 +72,7 @@ post example:
 {
   "name": "sensor-a",
   "custom_name": "測試A",
-  "address": "bluetooth address",
+  "sensor_id": "bluetooth sensor_id",
   "parking_status": "available",
   "coordinate": "27.0379561,125.5687641"
   "price_set": " / 3600 * 20"

@@ -17,17 +17,13 @@ const columns = [{
     <a href={`/avatar/${record.id}`}>{text}</a>
   )
 },{
-  title: 'Address',
-  dataIndex: 'address',
-  key: 'address',
+  title: 'sensor_id',
+  dataIndex: 'sensor_id',
+  key: 'sensor_id',
 },{
  title: 'status',
  dataIndex: 'parking_status',
  key: 'parking_status',
-},{
-  title: 'Bluetooth Status',
-  dataIndex: 'bluetooth_status',
-  key: 'bluetooth_status',
 },{
   title: 'latest report',
   dataIndex: 'latest_report',

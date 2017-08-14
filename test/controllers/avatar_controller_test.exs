@@ -1,11 +1,11 @@
 defmodule ParpServer.AvatarControllerTest do
   use ParpServer.ConnCase
-  
+
   alias ParpServer.Avatar
   import Logger
 
   @lstime Ecto.DateTime.utc
-  @valid_attrs %{address: "00:00:00:00", name: "nameA", bluetooth_type: 0, bluetooth_status: 0}
+  @valid_attrs %{sensor_id: "00:00:00:00", name: "nameA"}
   @invalid_attrs %{}
 
   setup %{conn: conn} do

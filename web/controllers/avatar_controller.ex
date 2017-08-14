@@ -30,7 +30,7 @@ defmodule ParpServer.AvatarController do
   defp findAvatar(avatar_params) do
     avatar = Repo.all(
       from ava in Avatar,
-      where: ava.address == ^Map.get(avatar_params, "address")
+      where: ava.sensor_id == ^Map.get(avatar_params, "sensor_id")
     )
 
     cond do
@@ -101,11 +101,11 @@ defmodule ParpServer.AvatarController do
     send_resp(conn, :no_content, "")
   end
 
-  def avatar_leave_parking(conn, %{"address" => address}) do
+  def avatar_leave_parking(conn, %{"sensor_id" => sensor_id}) do
     avatar = Repo.all(from ava in Avatar,
-                      where: ava.address == ^address)
+                      where: ava.sensor_id == ^sensor_id)
     if avatar == [] do
-      json(conn, %{error: "no found address: #{address}"})
+      json(conn, %{error: "no found sensor_id: #{sensor_id}"})
     else
       avatar = hd(avatar)
       at_history = Avatar.findLastAtHistory(avatar)
@@ -227,7 +227,7 @@ defmodule ParpServer.AvatarController do
             "coordinate": "25.0405821,121.5686972",
             "bluetooth_type": 1,
             "bluetooth_status": 10,
-            "address": "10:C6:FC:EE:DE:9C"
+            "sensor_id": "10:C6:FC:EE:DE:9C"
           },
           {
             "price_set": " / 3600 * 20",
@@ -240,7 +240,7 @@ defmodule ParpServer.AvatarController do
             "coordinate": "25.0379561,121.5687641",
             "bluetooth_type": 1,
             "bluetooth_status": 10,
-            "address": "6C:5C:14:56:69:39"
+            "sensor_id": "6C:5C:14:56:69:39"
           },
           {
             "price_set": " / 3600 * 20",
@@ -253,7 +253,7 @@ defmodule ParpServer.AvatarController do
             "coordinate": "25.0405821,121.5686972",
             "bluetooth_type": 2,
             "bluetooth_status": 10,
-            "address": "C8:FD:19:3D:7F:05"
+            "sensor_id": "C8:FD:19:3D:7F:05"
           }
         ]
       }
@@ -285,7 +285,7 @@ defmodule ParpServer.AvatarController do
           "coordinate": "25.0405821,121.5686972",
           "bluetooth_type": 1,
           "bluetooth_status": 10,
-          "address": "10:C6:FC:1E:8F:B7"
+          "sensor_id": "10:C6:FC:1E:8F:B7"
         }
       }
     """)

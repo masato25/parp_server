@@ -10,7 +10,7 @@ defmodule ParpServer.Helper.AvatarOps do
     Logger.info("ggggg2")
     avatar = Repo.all(
       from ava in Avatar,
-      where: ava.address == ^Map.get(avatar_params, "address")
+      where: ava.sensor_id == ^Map.get(avatar_params, "sensor_id")
     )
     Logger.info("ggggg3")
     cond do
@@ -57,11 +57,11 @@ defmodule ParpServer.Helper.AvatarOps do
     end
   end
 
-  def level_parking(%{"address" => address}) do
+  def level_parking(%{"sensor_id" => sensor_id}) do
     avatar = Repo.all(from ava in Avatar,
-                      where: ava.address == ^address)
+                      where: ava.sensor_id == ^sensor_id)
     if avatar == [] do
-      Logger.error("error: no found address: #{address}")
+      Logger.error("error: no found sensor_id: #{sensor_id}")
     else
       at_history = Avatar.findLastAtHistory(hd(avatar))
       if is_nil(at_history) do
@@ -71,7 +71,7 @@ defmodule ParpServer.Helper.AvatarOps do
         case Repo.update(changeset) do
           {:ok, changeset} ->
             Avatar.setPakringStatus(avatar, "available")
-            Logger.info("avatar delete with address: #{address}")
+            Logger.info("avatar delete with sensor_id: #{sensor_id}")
           {:error, changeset} ->
             Logger.error("[avatar_leave_pakring] update at_history got error: #{IO.inspect Map.get(changeset, :errors)}")
         end
