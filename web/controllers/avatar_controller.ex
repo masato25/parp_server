@@ -101,6 +101,27 @@ defmodule ParpServer.AvatarController do
     send_resp(conn, :no_content, "")
   end
 
+  def set_parking_start(conn, %{"sensor_id" => sensor_id}) do
+    avatar = Repo.all(from ava in Avatar,
+                      where: ava.sensor_id == ^sensor_id)
+    if avatar == [] do
+      conn
+      |> put_status(:unprocessable_entity)
+      |> render(ParpServer.ChangesetView, "error.json", error: "no found sensor_id: #{sensor_id}")
+    else
+      avatar = hd(avatar)
+      at_history = Avatar.findLastAtHistory(avatar)
+      if ! is_nil(at_history) do
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(ParpServer.ChangesetView, "error.json", error: "sensor_id: #{sensor_id} already another parking record are started")
+      else
+        Avatar.createAtHistory(avatar)
+        json(conn, %{message: "sensor_id: #{sensor_id} insert one parking record successed"})
+      end
+    end
+  end
+
   def avatar_leave_parking(conn, %{"sensor_id" => sensor_id}) do
     avatar = Repo.all(from ava in Avatar,
                       where: ava.sensor_id == ^sensor_id)
@@ -112,7 +133,11 @@ defmodule ParpServer.AvatarController do
       if is_nil(at_history) do
         json(conn, %{error: "no any parking info of #{avatar}"})
       else
-        changeset = AtHistory.changeset(at_history, %{"status": "leave", "end_at": TimeUtils.naiveTimeNow, "parking_status": "available"})
+        started_at = Map.get(at_history, :start_at)
+        update_endtime = TimeUtils.naiveTimeNow
+        mprice = NaiveDateTime.diff(update_endtime, started_at)
+        changeset = AtHistory.changeset(at_history,
+          %{"status": "leave", "end_at": update_endtime, "price": mprice})
         case Repo.update(changeset) do
           {:ok, changeset} ->
             changeset = Avatar.changeset(avatar, %{"update_at": DateTime.to_unix(Timex.now),"parking_status": "available"})
@@ -203,6 +228,11 @@ defmodule ParpServer.AvatarController do
         end
       end
     end
+  end
+
+  def helpResposeSocket(conn, _params) do
+    ParpServer.Endpoint.broadcast("customer:m1", "continue", %{})
+    json(conn, %{"msg": "ok!"})
   end
 
   # swagger #

@@ -52,10 +52,10 @@ class Avatar1 extends React.Component {
     },
     {
       title: "價格",
-      dataIndex: 'avatar_id',
-      key: 'avatar_id',
+      dataIndex: 'price',
+      key: 'price',
       render: (text, record) => (
-        <div>{this.computePrice(+moment(record.start_at), +moment(record.end_at))}{"元"}</div>
+        <div>{record.price  ? record.price : this.computePrice(+moment(record.start_at), +moment(record.end_at))}{"元"}</div>
       ),
     },
     {

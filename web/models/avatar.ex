@@ -28,7 +28,7 @@ defmodule ParpServer.Avatar do
   def changeset(struct, params \\ %{}) do
     struct
     # :coordinate, disable for demo
-    |> cast(params, [:name, :custom_name, :sensor_id, :bluetooth_status, :bluetooth_type, :latest_report, :parking_status, :reservation_at, :user_id, :coordinate])
+    |> cast(params, [:name, :custom_name, :sensor_id, :latest_report, :parking_status, :reservation_at, :user_id, :coordinate])
     |> validate_required([:sensor_id, :parking_status, :name])
     |> unique_constraint(:sensor_id)
   end

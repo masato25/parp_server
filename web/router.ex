@@ -33,6 +33,7 @@ defmodule ParpServer.Router do
     pipe_through :api
     resources "/avatars", AvatarController
     post "/avatar_leave_parking", AvatarController, :avatar_leave_parking
+    post "/avatar_start_parking", AvatarController, :set_parking_start
     resources "/at_hisotry", AtHistoryController
     get "/avatar_get_at/:id", AtHistoryController, :showbyAvatar
     post "/avatar_no_found_update_all", AtHistoryController, :no_avatar
@@ -47,6 +48,7 @@ defmodule ParpServer.Router do
 
     resources "/v1/car", CarController
     get "/v1/get_car_list", AvatarController, :getParkingPlaceByStatus
+    get "/v1/testsocket", AvatarController, :helpResposeSocket
   end
 
   scope "/api", ParpServer do
