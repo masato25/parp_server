@@ -4,7 +4,7 @@ defmodule ParpServer.Repo.Migrations.CreateAvatar do
   def change do
     create table(:avatar) do
       add :name, :string
-      add :sensor_id, :string
+      add :address, :string
       add :bluetooth_status, :integer
       add :bluetooth_type, :integer
       add :latitude_longitude, :string
@@ -13,6 +13,6 @@ defmodule ParpServer.Repo.Migrations.CreateAvatar do
 
       timestamps()
     end
-    create unique_index(:avatar, [:sensor_id], unique: true)
+    create unique_index(:avatar, [:address], unique: true)
   end
 end
