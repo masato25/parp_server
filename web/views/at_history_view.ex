@@ -11,12 +11,17 @@ defmodule ParpServer.AtHistoryView do
   end
 
   def render("at_history.json", %{at_history: at_history}) do
-    %{id: at_history.id,
+    %{
+      id: at_history.id,
       start_at: TS.naiveTimeConver(at_history.start_at),
       end_at: TS.naiveTimeConver(at_history.end_at),
       status: at_history.status,
       avatar_id: at_history.avatar_id,
       car_id: at_history.car_id,
+      user_id: at_history.user_id,
+      parking_license: at_history.parking_license,
+      price: at_history.price,
+      paid_status: at_history.paid_status
     }
   end
 end
