@@ -3,6 +3,8 @@ defmodule ParpServer.SessionController do
   alias ParpServer.Helper.ApiHelp
   alias ParpServer.Session
   alias ParpServer.User
+  alias ParpServer.Avatar
+  alias ParpServer.AtHistory
   require Logger
   use PhoenixSwagger
 
@@ -62,23 +64,53 @@ defmodule ParpServer.SessionController do
       json(conn, %{"error": "session not vaild"})
     else
       myuser = Session.checkSession(session)
-      if !myuser do
-        json(conn, %{"error": "session not vaild"})
-      else
-        userjson = %{
-          id: myuser.id,
-          username: myuser.username,
-          name: myuser.name,
-          gender: myuser.gender,
-          birthday: myuser.birthday,
-          parking_license: myuser.parking_license,
-          payment: myuser.payment
-        }
-        json(conn, %{user: userjson})
-      end
+      userjson = %{
+        id: myuser.id,
+        username: myuser.username,
+        name: myuser.name,
+        gender: myuser.gender,
+        birthday: myuser.birthday,
+        parking_license: myuser.parking_license,
+        payment: myuser.payment
+      }
+      json(conn, %{user: userjson})
     end
   end
 
+  def user_self_set_parking(conn, %{"custom_name" => custom_name}) do
+    session = ApiHelp.getSessionFromHeader(conn)
+    if session == - 1 do
+      json(conn, %{"error": "session not vaild"})
+    else
+      Logger.info(inspect session)
+      myuser = Session.checkSession(session)
+      Logger.info(inspect myuser)
+      avatar = Repo.all(from ava in Avatar,
+                        where: ava.name == ^custom_name)
+      if avatar == [] do
+        json(conn, %{error: "no found custom_name: #{custom_name}"})
+      else
+        avatar = hd(avatar)
+        at_history = Avatar.findLastAtHistory(avatar)
+        if is_nil(at_history) do
+          json(conn, %{error: "no any parking info of #{custom_name}"})
+        else
+          uid = Map.get(myuser, :id)
+          changeset = AtHistory.changeset(at_history,
+            %{user_id: uid})
+          case Repo.update(changeset) do
+            {:ok, changeset} ->
+              json(conn, %{msg: "ok"})
+            {:error, changeset} ->
+              conn
+              |> put_status(:unprocessable_entity)
+              |> render(ParpServer.ChangesetView, "error.json", changeset: changeset)
+              json(conn, %{error: Map.get(changeset, :errors)})
+          end
+        end
+      end
+    end
+  end
 
   # swagger #
   swagger_path :sessionCheck do

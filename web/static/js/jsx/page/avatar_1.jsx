@@ -65,6 +65,10 @@ class Avatar1 extends React.Component {
       render: (text, record) => (
         <a href={"#"} onClick={this.showModal}>{text}</a>
       )
+    },{
+      title: 'user_id',
+      dataIndex: 'user_id',
+      key: 'user_id',
     }];
     this.setState((p, n) => {
       return {

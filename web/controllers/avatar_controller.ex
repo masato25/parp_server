@@ -5,6 +5,7 @@ defmodule ParpServer.AvatarController do
   alias ParpServer.Session
   alias ParpServer.AtHistory
   alias ParpServer.Helper.TimeUtils
+  alias ParpServer.CustomerChannel
   use PhoenixSwagger
   import Logger
 
@@ -131,7 +132,7 @@ defmodule ParpServer.AvatarController do
       avatar = hd(avatar)
       at_history = Avatar.findLastAtHistory(avatar)
       if is_nil(at_history) do
-        json(conn, %{error: "no any parking info of #{avatar}"})
+        json(conn, %{error: "no any parking info of #{inspect avatar}"})
       else
         started_at = Map.get(at_history, :start_at)
         update_endtime = TimeUtils.naiveTimeNow
@@ -142,6 +143,8 @@ defmodule ParpServer.AvatarController do
           {:ok, changeset} ->
             changeset = Avatar.changeset(avatar, %{"update_at": DateTime.to_unix(Timex.now),"parking_status": "available"})
             Repo.update(changeset)
+            uid = Map.get(at_history, :user_id)
+            CustomerChannel.noticeUserPay(uid)
             json(conn, %{msg: "ok"})
           {:error, changeset} ->
             Logger.error("[avatar_leave_pakring] update at_history got error: #{IO.inspect Map.get(changeset, :errors)}")
@@ -230,8 +233,9 @@ defmodule ParpServer.AvatarController do
     end
   end
 
-  def helpResposeSocket(conn, _params) do
-    ParpServer.Endpoint.broadcast("customer:m1", "continue", %{})
+  def helpResposeSocket(conn, %{"id" => id}) do
+    # ParpServer.Endpoint.broadcast("customer:m1", "continue", %{})
+    ParpServer.CustomerChannel.noticeUserPay(id)
     json(conn, %{"msg": "ok!"})
   end
 

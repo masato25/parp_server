@@ -1,5 +1,6 @@
 defmodule ParpServer.AtHistory do
   use ParpServer.Web, :model
+  alias ParpServer.Repo
 
   schema "at_history" do
     field :start_at, :naive_datetime
@@ -23,5 +24,14 @@ defmodule ParpServer.AtHistory do
     struct
     |> cast(params, [:start_at, :end_at, :status, :avatar_id, :car_id, :user_id, :parking_license, :price, :paid_status])
     |> validate_required([:status])
+  end
+
+  def findMyPayParking(uid) do
+    Repo.all(
+      from ath in ParpServer.AtHistory,
+      where: ath.user_id == ^uid and (ath.paid_status == false or is_nil(ath.paid_status)) and not is_nil(ath.price),
+      order_by: [desc: :end_at],
+      limit: 1
+    )
   end
 end

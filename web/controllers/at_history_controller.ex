@@ -73,7 +73,7 @@ defmodule ParpServer.AtHistoryController do
       where: ath.status == "parking"
     )
     at_historys |> Enum.each(fn ath ->
-      ath_tmp = AtHistory.changeset(ath, %{status: "leave", end_at: TimeUtils.naiveTimeNow}) 
+      ath_tmp = AtHistory.changeset(ath, %{status: "leave", end_at: TimeUtils.naiveTimeNow})
       case Repo.update(ath_tmp) do
         {:error, changeset} ->
           Logger.info("update at_historys: #{IO.inspect Map.get(changeset, :errors)}")
@@ -83,4 +83,18 @@ defmodule ParpServer.AtHistoryController do
     end)
     json(conn, %{msg: "ok"})
   end
+
+  def paid_avatar(conn, %{"id" => id}) do
+    atHistory = Repo.get!(AtHistory, id)
+    changeset = AtHistory.changeset(atHistory, %{paid_status: true})
+    case Repo.update(changeset) do
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(ParpServer.ChangesetView, "error.json", changeset: changeset)
+      {:ok, _} ->
+        json(conn, %{"message": "ok"})
+    end
+  end
+
 end

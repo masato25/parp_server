@@ -49,6 +49,8 @@ defmodule ParpServer.Router do
     resources "/v1/car", CarController
     get "/v1/get_car_list", AvatarController, :getParkingPlaceByStatus
     get "/v1/testsocket", AvatarController, :helpResposeSocket
+    post "/v1/user_report_parking", SessionController, :user_self_set_parking
+    get "/v1/pay_parking_at/:id",  AtHistoryController, :paid_avatar
   end
 
   scope "/api", ParpServer do
