@@ -52,7 +52,7 @@ header: application/json
 
 post example:
 ```
-{
+"avatar": {
   "name": "sensor-a",
   "custom_name": "測試A",
   "sensor_id": "bluetooth sensor_id",
@@ -69,7 +69,7 @@ header: application/json
 
 post example:
 ```
-{
+"avatar": {
   "name": "sensor-a",
   "custom_name": "測試A",
   "sensor_id": "bluetooth sensor_id",
@@ -77,6 +77,10 @@ post example:
   "coordinate": "27.0379561,125.5687641"
   "price_set": " / 3600 * 20"
 }
+```
+ex.
+```
+curl -XPUT -H "Content-Type:application/json" http://localhost:4000/api/avatars/1 -d '{"avatar": {   "coordinate": "25.049400, 121.523637",   "custom_name": "1",   "id": 1,   "name": "PARP-1",   "parking_status": "available",   "price_set": " / 3600 * 20",   "sensor_id": "51:21:00:2B:88:8C",   "user_id": 2 }}'
 ```
 
 ### 刪除一個車位
