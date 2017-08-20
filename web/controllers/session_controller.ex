@@ -86,7 +86,7 @@ defmodule ParpServer.SessionController do
       myuser = Session.checkSession(session)
       Logger.info(inspect myuser)
       avatar = Repo.all(from ava in Avatar,
-                        where: ava.name == ^custom_name)
+                        where: ava.custom_name == ^custom_name)
       if avatar == [] do
         json(conn, %{error: "no found custom_name: #{custom_name}"})
       else
