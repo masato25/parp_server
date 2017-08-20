@@ -35,6 +35,9 @@ defmodule ParpServer.Router do
     post "/avatar_leave_parking", AvatarController, :avatar_leave_parking
     post "/avatar_start_parking", AvatarController, :set_parking_start
     resources "/at_hisotry", AtHistoryController
+    get "/v1/pending_parking_check", AtHistoryController, :find_pending_check_parking
+    get "/v1/update_parking_license_all", AtHistoryController, :update_parking_license_all
+    put "/v1/set_parking_license", AtHistoryController, :set_parking_license
     get "/avatar_get_at/:id", AtHistoryController, :showbyAvatar
     post "/avatar_no_found_update_all", AtHistoryController, :no_avatar
     resources "/v1/user", UserController, except: [:update]

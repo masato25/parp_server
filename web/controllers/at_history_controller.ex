@@ -97,4 +97,63 @@ defmodule ParpServer.AtHistoryController do
     end
   end
 
+  def find_pending_check_parking(conn, _params) do
+    atHistory = Repo.all(from ah in AtHistory,
+                  where: is_nil(ah.user_id) and is_nil(ah.parking_license)
+                )
+                # |> Enum.map(&Poison.encode!(&1))
+                # |> Enum.map(&Poison.decode!(&1))
+    if is_nil(atHistory) do
+      json(conn, avatars: nil)
+    else
+      collectAvatar = atHistory |> Enum.map(fn o ->
+        Map.get(o, :avatar_id)
+      end) |> Enum.uniq |> List.flatten
+      avatar = Repo.all(
+        from at in Avatar,
+        where: at.id in ^collectAvatar )
+      |> Enum.map(&Poison.encode!(&1))
+      |> Enum.map(&Poison.decode!(&1))
+
+      atHistory = atHistory
+        |> Enum.map(&Poison.encode!(&1))
+        |> Enum.map(&Poison.decode!(&1))
+        |> Enum.group_by(&Map.get(&1, :avatar_id))
+      avatars = avatar |> Enum.map(fn aa ->
+        avatar_id = Map.get(aa, "id")
+        ats = Map.get(atHistory, avatar_id)
+        aa = Map.put(aa, "at_historys", ats)
+      end)
+      json(conn, %{avatars: avatars})
+    end
+  end
+
+  #for resolve old parking records
+  def update_parking_license_all(conn, _params) do
+    atHistory = Repo.all(from ah in AtHistory,
+                  where: is_nil(ah.user_id) and is_nil(ah.parking_license)
+                )
+    atHistory |> Enum.each(fn ah ->
+      changeset = AtHistory.changeset(ah, %{parking_license: "PARP-9999"})
+      Repo.update(changeset)
+    end)
+    json(conn, %{"msg": "ok"})
+  end
+
+  def set_parking_license(conn, params) do
+    case params do
+      %{"parking_id" => parking_id, "parking_license" => parking_license} ->
+        atHistory = Repo.get!(AtHistory, parking_id)
+        if is_nil(atHistory) do
+          render(conn, %{"error": "not found any parking history of parking_id: #{parking_id}"})
+        else
+          changeset = AtHistory.changeset(atHistory, %{parking_license: "PARP-9999"})
+          Repo.update(changeset)
+          json(conn, %{"msg": "ok"})
+        end
+      true ->
+        json(conn, %{"error": "parking_id & parking_license is required field, please check"})
+    end
+  end
+
 end
