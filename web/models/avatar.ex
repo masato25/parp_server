@@ -1,5 +1,6 @@
 defmodule ParpServer.Avatar do
   use ParpServer.Web, :model
+  @derive {Poison.Encoder, only: [:name, :sensor_id, :coordinate, :custom_name, :user_id, :reservation_at, :parking_status]}
   import Logger
   alias ParpServer.AtHistory
   alias ParpServer.Helper.TimeUtils

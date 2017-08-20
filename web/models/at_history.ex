@@ -1,6 +1,7 @@
 defmodule ParpServer.AtHistory do
   use ParpServer.Web, :model
   alias ParpServer.Repo
+  @derive {Poison.Encoder, only: [:id, :start_at, :end_at, :status, :user_id, :parking_license, :price, :paid_status]}
 
   schema "at_history" do
     field :start_at, :naive_datetime
