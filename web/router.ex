@@ -32,6 +32,9 @@ defmodule ParpServer.Router do
   # Other scopes may use custom stacks.
   scope "/api", ParpServer do
     pipe_through :api
+    # for test
+    get"/map_test", PageController, :maptest
+
     resources "/avatars", AvatarController
     post "/avatar_leave_parking", AvatarController, :avatar_leave_parking
     post "/avatar_start_parking", AvatarController, :set_parking_start

@@ -10,6 +10,7 @@ defmodule ParpServer.PageController do
     put_layout("map.html") |>
     render("map_test.html")
   end
+
   def index(conn, _params) do
     render conn, "index.html"
   end
