@@ -26,6 +26,7 @@ defmodule ParpServer.Router do
     get "/avatar/:id", AvatarController, :avatar1html
     get "/login", PageController, :loginhtml
     get "/car", CarController, :indexhtml
+    get "/map_test", PageController, :map_test
   end
 
   # Other scopes may use custom stacks.

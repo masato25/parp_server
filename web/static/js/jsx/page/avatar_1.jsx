@@ -55,8 +55,24 @@ class Avatar1 extends React.Component {
       dataIndex: 'price',
       key: 'price',
       render: (text, record) => (
-        <div>{record.price  ? record.price : this.computePrice(+moment(record.start_at), +moment(record.end_at))}{"元"}</div>
+        <div>
+          {record.price  ? record.price : this.computePrice(+moment(record.start_at), +moment(record.end_at))}{"元"}
+          <div>{record.paid_status
+            ? 'paid'
+            : ''
+          }</div>
+        </div>
       ),
+    },
+    {
+      title: 'parking_license',
+      dataIndex: 'parking_license',
+      key: 'parking_license'
+    },
+    {
+      title: 'user_id',
+      dataIndex: 'user_id',
+      key: 'user_id',
     },
     {
       title: 'car_id',
@@ -65,10 +81,6 @@ class Avatar1 extends React.Component {
       render: (text, record) => (
         <a href={"#"} onClick={this.showModal}>{text}</a>
       )
-    },{
-      title: 'user_id',
-      dataIndex: 'user_id',
-      key: 'user_id',
     }];
     this.setState((p, n) => {
       return {
@@ -85,7 +97,18 @@ class Avatar1 extends React.Component {
     const self = this
     ifetch(`/api/avatars/${avatarId}`, 'GET')
       .then(function(stories) {
-        window.init_map(stories.data.name, stories.data.coordinate, "red")
+        // layoutout -> avatar1.html.eex
+        // window.init_map(stories.data.name, stories.data.coordinate, "red")
+        const b = stories.data
+        console.log(b)
+        const bmap = [{
+          name: b.name,
+          coordinate: b.coordinate,
+          parking_status: b.parking_status,
+          sensor_id: b.sensor_id,
+          custom_name: b.custom_name,
+        }]
+        window.init_map(bmap, b.coordinate.split(","), 18)
         self.setState((p, n) => {
           return {
             name: stories.data.name,
@@ -162,7 +185,7 @@ class Avatar1 extends React.Component {
               <Col span={12}>
                 <Card title="Map">
                   <div style={{overflow: 'hidden', height: '440px', width: '700px'}}>
-                    <div id='gmap_canvas' style={{height: '440px', width: '700px'}}></div>
+                    <div id='gmap_canvas' className='gmap_canvas' style={{height: '440px', width: '700px'}}></div>
                   </div>
                 </Card>
               </Col>

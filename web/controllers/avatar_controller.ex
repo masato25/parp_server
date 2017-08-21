@@ -12,13 +12,13 @@ defmodule ParpServer.AvatarController do
   def indexhtml(conn, _params) do
     avatar = Repo.all(Avatar)
     conn |>
-    put_layout("page.html") |>
+    put_layout("map.html") |>
     render("page.html", avatar: avatar)
   end
 
   def avatar1html(conn, %{"id" => id}) do
     conn |>
-    put_layout("avatar1.html") |>
+    put_layout("avatar2.html") |>
     render("page.html", [])
   end
 

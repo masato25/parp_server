@@ -5,6 +5,11 @@ defmodule ParpServer.PageController do
   alias ParpServer.Car
   alias ParpServer.AtHistory
 
+  def map_test(conn, _params) do
+    conn |>
+    put_layout("map.html") |>
+    render("map_test.html")
+  end
   def index(conn, _params) do
     render conn, "index.html"
   end

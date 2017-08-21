@@ -75,20 +75,22 @@ class MyPage1 extends React.Component {
       return
     }
     const dt = _.chain(d).map((b) => {
-      if(b.parking_status == "available"){
-        return {
-          name: b.name,
-          coordinate: b.coordinate,
-          color: "green"
-        }
-      }else{
-        return {
-          name: b.name,
-          coordinate: b.coordinate,
-          color: "red"
-        }
+      const bmap = {
+        name: b.name,
+        coordinate: b.coordinate,
+        color: "green",
+        parking_status: b.parking_status,
+        sensor_id: b.sensor_id,
+        custom_name: b.custom_name,
       }
+      if(b.parking_status == "available"){
+        bmap["color"] = "green"
+      }else{
+        bmap["color"] = "red"
+      }
+      return bmap
     }).sortedUniqBy((b) => { return b.coordinate}).take(50).value()
+    console.log("window.init_map(dt)")
     window.init_map(dt)
   }
   onSearch(val){
@@ -147,7 +149,7 @@ class MyPage1 extends React.Component {
               <Col span={12}>
                 <Card title="Map">
                   <div style={{overflow: 'hidden', height: '600px', width: '100%'}}>
-                    <div id='gmap_canvas' style={{height: '600px', width: '100%'}}></div>
+                    <div id='gmap_canvas' className='gmap_canvas' style={{height: '600px', width: '100%'}}></div>
                   </div>
                 </Card>
               </Col>

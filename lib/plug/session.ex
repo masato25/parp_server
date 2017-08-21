@@ -4,7 +4,7 @@ defmodule ParpServer.Plug.SessionPlug do
 
   # those uri will, skip authorize session, ex. public page
   @skipUri ["/api/avatars", "/api/avatar_leave_pakring", "/api/avatar_no_found_update_all"]
-  @loginUri ["/login"]
+  @loginUri ["/login", "/map_test"]
 
   def init(opts) do
     opts
