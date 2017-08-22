@@ -99,12 +99,12 @@ defmodule ParpServer.AtHistoryController do
 
   def find_pending_check_parking(conn, _params) do
     atHistory = Repo.all(from ah in AtHistory,
-                  where: is_nil(ah.user_id) and is_nil(ah.parking_license) and (ah.status == 'parking')
+                  where: is_nil(ah.user_id) and is_nil(ah.parking_license) and (ah.status == "parking")
                 )
                 # |> Enum.map(&Poison.encode!(&1))
                 # |> Enum.map(&Poison.decode!(&1))
     if is_nil(atHistory) do
-      json(conn, avatars: nil)
+      json(conn, avatars: [])
     else
       collectAvatar = atHistory |> Enum.map(fn o ->
         Map.get(o, :avatar_id)
